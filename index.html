@@ -1,0 +1,3419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>薪记 · 个人工资记账</title>
+        <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNEY0NkU1Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzdDM0FFRCIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9InVybCgjZykiLz4KICA8dGV4dCB4PSIzMiIgeT0iNDEiIGZvbnQtZmFtaWx5PSItYXBwbGUtc3lzdGVtLCBCbGlua01hY1N5c3RlbUZvbnQsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+6JaqPC90ZXh0PgogIDxwYXRoIGQ9Ik0xOCA1MCBRMzIgNDQgNDYgNTAiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMi41IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9IjAuNiIvPgo8L3N2Zz4=">
+        <style>
+            :root {
+                --primary: #4F46E5;
+                --primary-light: #6366F1;
+                --primary-lighter: #818CF8;
+                --primary-bg: #EEF2FF;
+                --bg: #F1F5F9;
+                --card: #FFFFFF;
+                --text-1: #0F172A;
+                --text-2: #475569;
+                --text-3: #94A3B8;
+                --border: #E2E8F0;
+                --border-light: #F1F5F9;
+                --success: #10B981;
+                --success-bg: #ECFDF5;
+                --warning: #F59E0B;
+                --warning-bg: #FFFBEB;
+                --danger: #EF4444;
+                --danger-bg: #FEF2F2;
+                --info: #3B82F6;
+                --info-bg: #EFF6FF;
+                --shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+                --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.07);
+                --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
+                --radius: 12px;
+                --radius-sm: 8px;
+                --radius-lg: 16px;
+                --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                --content-max: 1100px;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+                background: var(--bg);
+                color: var(--text-1);
+                line-height: 1.6;
+                -webkit-font-smoothing: antialiased;
+                min-height: 100vh;
+            }
+
+            /* 启动页 */
+            .splash {
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #6366F1 100%);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: opacity 0.6s ease, visibility 0.6s ease;
+                cursor: pointer;
+            }
+
+            .splash.hide {
+                opacity: 0;
+                visibility: hidden;
+            }
+
+            .splash::before {
+                content: '';
+                position: absolute;
+                top: -20%;
+                right: -10%;
+                width: 500px;
+                height: 500px;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+                border-radius: 50%;
+            }
+
+            .splash-logo {
+                width: 96px;
+                height: 96px;
+                border-radius: 24px;
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(10px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 24px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+                animation: splashFloat 2s ease-in-out infinite;
+                position: relative;
+                z-index: 1;
+            }
+
+            .splash-logo img {
+                width: 64px;
+                height: 64px;
+            }
+
+            @keyframes splashFloat {
+
+                0%,
+                100% {
+                    transform: translateY(0)
+                }
+
+                50% {
+                    transform: translateY(-8px)
+                }
+            }
+
+            .splash-title {
+                font-size: 32px;
+                font-weight: 800;
+                color: #fff;
+                letter-spacing: 4px;
+                margin-bottom: 8px;
+                position: relative;
+                z-index: 1;
+            }
+
+            .splash-subtitle {
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.7);
+                letter-spacing: 2px;
+                margin-bottom: 40px;
+                position: relative;
+                z-index: 1;
+            }
+
+            .splash-loader {
+                display: flex;
+                gap: 8px;
+                position: relative;
+                z-index: 1;
+            }
+
+            .splash-loader span {
+                width: 8px;
+                height: 8px;
+                background: rgba(255, 255, 255, 0.5);
+                border-radius: 50%;
+                animation: splashBounce 1.2s ease-in-out infinite;
+            }
+
+            .splash-loader span:nth-child(2) {
+                animation-delay: .15s
+            }
+
+            .splash-loader span:nth-child(3) {
+                animation-delay: .3s
+            }
+
+            @keyframes splashBounce {
+
+                0%,
+                80%,
+                100% {
+                    transform: scale(.6);
+                    opacity: .5
+                }
+
+                40% {
+                    transform: scale(1);
+                    opacity: 1
+                }
+            }
+
+            .splash-hint {
+                position: absolute;
+                bottom: 40px;
+                font-size: 12px;
+                color: rgba(255, 255, 255, 0.4);
+                letter-spacing: 1px;
+                z-index: 1;
+            }
+
+            /* 导航 */
+            .navbar {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: rgba(255, 255, 255, 0.85);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border-bottom: 1px solid var(--border);
+            }
+
+            .navbar-inner {
+                max-width: var(--content-max);
+                margin: 0 auto;
+                padding: 0 24px;
+                height: 64px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .logo {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 18px;
+                font-weight: 700;
+                color: var(--text-1);
+                cursor: pointer;
+                user-select: none;
+            }
+
+            .logo-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+                flex-shrink: 0;
+            }
+
+            .logo-icon img {
+                width: 100%;
+                height: 100%;
+                display: block;
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 4px;
+                align-items: center;
+            }
+
+            .nav-link {
+                padding: 8px 16px;
+                border-radius: var(--radius-sm);
+                font-size: 14px;
+                font-weight: 500;
+                color: var(--text-2);
+                cursor: pointer;
+                transition: var(--transition);
+                border: none;
+                background: none;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-family: inherit;
+            }
+
+            .nav-link:hover {
+                background: var(--border-light);
+                color: var(--text-1);
+            }
+
+            .nav-link.active {
+                background: var(--primary-bg);
+                color: var(--primary);
+            }
+
+            .nav-right {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .data-status {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 12px;
+                color: var(--text-3);
+                padding: 6px 12px;
+                background: var(--border-light);
+                border-radius: 20px;
+                cursor: pointer;
+                transition: var(--transition);
+            }
+
+            .data-status:hover {
+                background: var(--border);
+            }
+
+            .status-dot {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: var(--success);
+            }
+
+            .status-dot.offline {
+                background: var(--warning);
+            }
+
+            /* 主内容 */
+            .main {
+                max-width: var(--content-max);
+                margin: 0 auto;
+                padding: 28px 24px 60px;
+            }
+
+            .page {
+                display: none;
+                animation: fadeIn 0.3s ease;
+            }
+
+            .page.active {
+                display: block;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(8px)
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0)
+                }
+            }
+
+            .page-header {
+                margin-bottom: 24px;
+            }
+
+            .page-title {
+                font-size: 24px;
+                font-weight: 700;
+                color: var(--text-1);
+                margin-bottom: 4px;
+            }
+
+            .page-subtitle {
+                font-size: 14px;
+                color: var(--text-3);
+            }
+
+            /* 卡片 */
+            .card {
+                background: var(--card);
+                border-radius: var(--radius);
+                box-shadow: var(--shadow);
+                border: 1px solid var(--border-light);
+                overflow: hidden;
+            }
+
+            .card-header {
+                padding: 18px 22px;
+                border-bottom: 1px solid var(--border-light);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .card-title {
+                font-size: 15px;
+                font-weight: 600;
+                color: var(--text-1);
+            }
+
+            .card-body {
+                padding: 22px;
+            }
+
+            /* 按钮 */
+            .btn {
+                padding: 9px 18px;
+                border-radius: var(--radius-sm);
+                font-size: 13px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: var(--transition);
+                border: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                white-space: nowrap;
+                font-family: inherit;
+            }
+
+            .btn-primary {
+                background: var(--primary);
+                color: #fff;
+            }
+
+            .btn-primary:hover {
+                background: var(--primary-light);
+                box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+            }
+
+            .btn-secondary {
+                background: var(--border-light);
+                color: var(--text-2);
+            }
+
+            .btn-secondary:hover {
+                background: var(--border);
+            }
+
+            .btn-danger {
+                background: var(--danger-bg);
+                color: var(--danger);
+            }
+
+            .btn-danger:hover {
+                background: var(--danger);
+                color: #fff;
+            }
+
+            .btn-success {
+                background: var(--success-bg);
+                color: var(--success);
+            }
+
+            .btn-success:hover {
+                background: var(--success);
+                color: #fff;
+            }
+
+            .btn-sm {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .btn-outline {
+                background: transparent;
+                border: 1px solid var(--border);
+                color: var(--text-2);
+            }
+
+            .btn-outline:hover {
+                border-color: var(--primary);
+                color: var(--primary);
+            }
+
+            /* 表单 */
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 14px;
+            }
+
+            .form-group label {
+                font-size: 13px;
+                font-weight: 500;
+                color: var(--text-2);
+                margin-bottom: 6px;
+            }
+
+            .form-group input[type="text"],
+            .form-group input[type="number"],
+            .form-group input[type="date"],
+            .form-group textarea {
+                padding: 9px 12px;
+                border: 1px solid var(--border);
+                border-radius: var(--radius-sm);
+                font-size: 14px;
+                color: var(--text-1);
+                outline: none;
+                transition: var(--transition);
+                background: #fff;
+                font-family: inherit;
+                width: 100%;
+            }
+
+            .form-group input:focus,
+            .form-group textarea:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            }
+
+            .form-group input::placeholder {
+                color: var(--text-3);
+            }
+
+            .form-group select {
+                padding: 9px 32px 9px 12px;
+                border: 1px solid var(--border);
+                border-radius: var(--radius-sm);
+                font-size: 14px;
+                color: var(--text-1);
+                outline: none;
+                transition: var(--transition);
+                background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%2394A3B8' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 10px center;
+                appearance: none;
+                -webkit-appearance: none;
+                cursor: pointer;
+                font-family: inherit;
+                width: 100%;
+            }
+
+            .form-group select:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            }
+
+            .form-row {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 14px;
+            }
+
+            .form-section-title {
+                font-size: 13px;
+                font-weight: 600;
+                color: var(--primary);
+                margin: 18px 0 10px;
+                padding-bottom: 8px;
+                border-bottom: 1px solid var(--border-light);
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .form-section-title:first-child {
+                margin-top: 0;
+            }
+
+            /* 开关 */
+            .switch-wrap {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 14px;
+            }
+
+            .switch {
+                position: relative;
+                width: 40px;
+                height: 22px;
+                cursor: pointer;
+            }
+
+            .switch input {
+                display: none;
+            }
+
+            .switch-slider {
+                position: absolute;
+                inset: 0;
+                background: var(--border);
+                border-radius: 22px;
+                transition: var(--transition);
+            }
+
+            .switch-slider::before {
+                content: '';
+                position: absolute;
+                width: 18px;
+                height: 18px;
+                left: 2px;
+                top: 2px;
+                background: #fff;
+                border-radius: 50%;
+                transition: var(--transition);
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            }
+
+            .switch input:checked+.switch-slider {
+                background: var(--primary);
+            }
+
+            .switch input:checked+.switch-slider::before {
+                transform: translateX(18px);
+            }
+
+            .switch-label {
+                font-size: 13px;
+                font-weight: 500;
+                color: var(--text-2);
+            }
+
+            .calc-hint {
+                background: var(--info-bg);
+                border-radius: var(--radius-sm);
+                padding: 10px 14px;
+                margin-bottom: 14px;
+                font-size: 12px;
+                color: var(--info);
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            /* Dashboard */
+            .welcome-banner {
+                background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #6366F1 100%);
+                border-radius: var(--radius-lg);
+                padding: 32px;
+                color: #fff;
+                margin-bottom: 24px;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .welcome-banner::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -10%;
+                width: 400px;
+                height: 400px;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+                border-radius: 50%;
+            }
+
+            .welcome-content {
+                position: relative;
+                z-index: 1;
+            }
+
+            .welcome-title {
+                font-size: 26px;
+                font-weight: 700;
+                margin-bottom: 6px;
+            }
+
+            .welcome-desc {
+                font-size: 14px;
+                opacity: 0.85;
+                margin-bottom: 20px;
+            }
+
+            .welcome-actions {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+
+            .btn-banner {
+                padding: 9px 18px;
+                border-radius: var(--radius-sm);
+                font-size: 13px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: var(--transition);
+                border: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                font-family: inherit;
+            }
+
+            .btn-banner-primary {
+                background: #fff;
+                color: var(--primary);
+            }
+
+            .btn-banner-primary:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+
+            .btn-banner-ghost {
+                background: rgba(255, 255, 255, 0.15);
+                color: #fff;
+                backdrop-filter: blur(10px);
+            }
+
+            .btn-banner-ghost:hover {
+                background: rgba(255, 255, 255, 0.25);
+            }
+
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+                margin-bottom: 24px;
+            }
+
+            .stat-card {
+                background: var(--card);
+                border-radius: var(--radius);
+                padding: 20px;
+                box-shadow: var(--shadow);
+                border: 1px solid var(--border-light);
+                transition: var(--transition);
+                cursor: pointer;
+            }
+
+            .stat-card:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-md);
+            }
+
+            .stat-card-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 12px;
+            }
+
+            .stat-label {
+                font-size: 13px;
+                color: var(--text-3);
+                font-weight: 500;
+            }
+
+            .stat-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+            }
+
+            .stat-icon.income {
+                background: var(--success-bg);
+                color: var(--success);
+            }
+
+            .stat-icon.net {
+                background: var(--primary-bg);
+                color: var(--primary);
+            }
+
+            .stat-icon.tax {
+                background: var(--danger-bg);
+                color: var(--danger);
+            }
+
+            .stat-icon.fund {
+                background: var(--info-bg);
+                color: var(--info);
+            }
+
+            .stat-value {
+                font-size: 22px;
+                font-weight: 700;
+                color: var(--text-1);
+                margin-bottom: 4px;
+                font-variant-numeric: tabular-nums;
+            }
+
+            .stat-sub {
+                font-size: 12px;
+                color: var(--text-3);
+            }
+
+            .quick-entries {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 14px;
+                margin-bottom: 24px;
+            }
+
+            .quick-entry {
+                background: var(--card);
+                border-radius: var(--radius);
+                padding: 20px;
+                box-shadow: var(--shadow);
+                border: 1px solid var(--border-light);
+                cursor: pointer;
+                transition: var(--transition);
+                text-align: center;
+            }
+
+            .quick-entry:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-md);
+                border-color: var(--primary-lighter);
+            }
+
+            .quick-entry-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: 14px;
+                margin: 0 auto 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
+            }
+
+            .quick-entry-icon.e1 {
+                background: linear-gradient(135deg, #EEF2FF, #E0E7FF);
+                color: var(--primary);
+            }
+
+            .quick-entry-icon.e2 {
+                background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
+                color: var(--success);
+            }
+
+            .quick-entry-icon.e3 {
+                background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+                color: var(--info);
+            }
+
+            .quick-entry-icon.e4 {
+                background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
+                color: var(--warning);
+            }
+
+            .quick-entry-title {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--text-1);
+                margin-bottom: 2px;
+            }
+
+            .quick-entry-desc {
+                font-size: 12px;
+                color: var(--text-3);
+            }
+
+            .two-col {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            /* 最近记录 */
+            .recent-list {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .recent-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 14px 0;
+                border-bottom: 1px solid var(--border-light);
+            }
+
+            .recent-item:last-child {
+                border-bottom: none;
+            }
+
+            .recent-left {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .recent-date-badge {
+                width: 44px;
+                height: 44px;
+                border-radius: 10px;
+                background: var(--primary-bg);
+                color: var(--primary);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                font-size: 9px;
+                font-weight: 600;
+                line-height: 1.2;
+                flex-shrink: 0;
+            }
+
+            .recent-date-badge span {
+                font-size: 15px;
+            }
+
+            .recent-info .recent-date {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--text-1);
+            }
+
+            .recent-info .recent-detail {
+                font-size: 12px;
+                color: var(--text-3);
+            }
+
+            .recent-type-tag {
+                display: inline-block;
+                padding: 1px 6px;
+                border-radius: 4px;
+                font-size: 10px;
+                font-weight: 600;
+                margin-left: 6px;
+            }
+
+            .type-salary {
+                background: var(--primary-bg);
+                color: var(--primary);
+            }
+
+            .type-labor {
+                background: var(--warning-bg);
+                color: var(--warning);
+            }
+
+            .type-author {
+                background: var(--info-bg);
+                color: var(--info);
+            }
+
+            .type-other {
+                background: var(--border-light);
+                color: var(--text-2);
+            }
+
+            .recent-right {
+                text-align: right;
+            }
+
+            .recent-net {
+                font-size: 15px;
+                font-weight: 700;
+                color: var(--success);
+                font-variant-numeric: tabular-nums;
+            }
+
+            .recent-gross {
+                font-size: 12px;
+                color: var(--text-3);
+            }
+
+            /* 图表 */
+            .chart-body {
+                display: flex;
+                flex-direction: column;
+                height: 320px;
+                padding: 16px 20px;
+            }
+
+            .chart-container {
+                position: relative;
+                width: 100%;
+                flex: 1 1 auto;
+                min-height: 0;
+            }
+
+            .chart-container canvas {
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+
+            /* 隐藏滚动条但保留滚动功能 */
+            ::-webkit-scrollbar {
+                width: 0;
+                height: 0;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: transparent;
+            }
+
+            * {
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            /* 记录管理 */
+            .filter-bar {
+                display: flex;
+                gap: 12px;
+                align-items: flex-end;
+                flex-wrap: wrap;
+                margin-bottom: 20px;
+            }
+
+            .filter-bar .form-group {
+                margin-bottom: 0;
+                min-width: 140px;
+                flex: 1;
+            }
+
+            .filter-bar .form-group:first-child {
+                max-width: 160px;
+            }
+
+            .table-wrap {
+                overflow-x: auto;
+            }
+
+            table.data-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 13px;
+                table-layout: fixed;
+            }
+
+            table.data-table th {
+                background: var(--border-light);
+                padding: 12px 14px;
+                text-align: left;
+                font-weight: 600;
+                color: var(--text-2);
+                font-size: 12px;
+                white-space: nowrap;
+            }
+
+            table.data-table th.num,
+            table.data-table td.num {
+                text-align: right;
+                font-variant-numeric: tabular-nums;
+            }
+
+            table.data-table td {
+                padding: 12px 14px;
+                border-bottom: 1px solid var(--border-light);
+                color: var(--text-1);
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            table.data-table tbody tr {
+                transition: var(--transition);
+                cursor: pointer;
+            }
+
+            table.data-table tbody tr:hover {
+                background: var(--border-light);
+            }
+
+            .net-positive {
+                color: var(--success);
+                font-weight: 600;
+            }
+
+            .date-tag {
+                display: inline-block;
+                padding: 3px 10px;
+                background: var(--primary-bg);
+                color: var(--primary);
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 600;
+                white-space: nowrap;
+            }
+
+            .row-actions {
+                display: flex;
+                gap: 6px;
+                justify-content: flex-end;
+            }
+
+            .icon-btn {
+                width: 30px;
+                height: 30px;
+                border-radius: 8px;
+                border: none;
+                background: transparent;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+                transition: var(--transition);
+                color: var(--text-3);
+            }
+
+            .icon-btn:hover {
+                background: var(--border-light);
+                color: var(--text-1);
+            }
+
+            .icon-btn.danger:hover {
+                background: var(--danger-bg);
+                color: var(--danger);
+            }
+
+            .detail-row {
+                display: none;
+            }
+
+            .detail-row.show {
+                display: table-row;
+            }
+
+            .detail-content {
+                background: #FAFBFC;
+                padding: 16px 20px;
+            }
+
+            .detail-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 12px;
+            }
+
+            .detail-item-label {
+                font-size: 11px;
+                color: var(--text-3);
+                margin-bottom: 2px;
+            }
+
+            .detail-item-value {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--text-1);
+                font-variant-numeric: tabular-nums;
+            }
+
+            .detail-item-value.deduct {
+                color: var(--danger);
+            }
+
+            .detail-item-value.income {
+                color: var(--success);
+            }
+
+            .empty-state {
+                text-align: center;
+                padding: 60px 20px;
+                color: var(--text-3);
+            }
+
+            .empty-state-icon {
+                font-size: 48px;
+                margin-bottom: 16px;
+                opacity: 0.5;
+            }
+
+            .empty-state-text {
+                font-size: 15px;
+                margin-bottom: 16px;
+            }
+
+            /* 统计 */
+            .stat-controls {
+                display: flex;
+                gap: 12px;
+                align-items: flex-end;
+                flex-wrap: wrap;
+                margin-bottom: 20px;
+            }
+
+            .stat-controls .form-group {
+                margin-bottom: 0;
+                flex: 1;
+                min-width: 140px;
+            }
+
+            .stat-result-card {
+                background: linear-gradient(135deg, var(--primary), var(--primary-light));
+                border-radius: var(--radius);
+                padding: 28px;
+                color: #fff;
+                margin-bottom: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+
+            .stat-result-label {
+                font-size: 14px;
+                opacity: 0.85;
+                margin-bottom: 4px;
+            }
+
+            .stat-result-value {
+                font-size: 36px;
+                font-weight: 800;
+                font-variant-numeric: tabular-nums;
+            }
+
+            .stat-result-meta {
+                text-align: right;
+                font-size: 13px;
+                opacity: 0.8;
+            }
+
+            .stat-result-meta div {
+                margin-bottom: 4px;
+            }
+
+            /* 构成明细 */
+            .breakdown-list {
+                margin-top: 8px;
+            }
+
+            .breakdown-section-title {
+                font-size: 12px;
+                color: var(--text-3);
+                margin: 16px 0 8px;
+                font-weight: 600;
+            }
+
+            .breakdown-section-title:first-child {
+                margin-top: 0;
+            }
+
+            .breakdown-item {
+                display: flex;
+                align-items: center;
+                padding: 10px 0;
+                border-bottom: 1px solid var(--border-light);
+            }
+
+            .breakdown-item:last-child {
+                border-bottom: none;
+            }
+
+            .breakdown-name {
+                font-size: 13px;
+                color: var(--text-2);
+                width: 80px;
+                flex-shrink: 0;
+            }
+
+            .breakdown-bar-wrap {
+                flex: 1;
+                height: 6px;
+                background: var(--border-light);
+                border-radius: 3px;
+                overflow: hidden;
+                margin: 0 12px;
+                min-width: 0;
+            }
+
+            .breakdown-bar {
+                height: 100%;
+                border-radius: 3px;
+                transition: width 0.5s ease;
+            }
+
+            .breakdown-value {
+                font-size: 13px;
+                font-weight: 600;
+                font-variant-numeric: tabular-nums;
+                color: var(--text-1);
+                width: 90px;
+                text-align: right;
+                flex-shrink: 0;
+            }
+
+            /* 设置 */
+            .settings-section {
+                margin-bottom: 24px;
+            }
+
+            .settings-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 16px 0;
+                border-bottom: 1px solid var(--border-light);
+                gap: 16px;
+            }
+
+            .settings-item:last-child {
+                border-bottom: none;
+            }
+
+            .settings-info {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .settings-name {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--text-1);
+                margin-bottom: 2px;
+            }
+
+            .settings-desc {
+                font-size: 12px;
+                color: var(--text-3);
+            }
+
+            .settings-actions {
+                display: flex;
+                gap: 8px;
+                flex-shrink: 0;
+                align-items: center;
+            }
+
+            .settings-actions .form-group {
+                margin-bottom: 0;
+                width: 100px;
+            }
+
+            .data-file-info {
+                background: var(--primary-bg);
+                border-radius: var(--radius-sm);
+                padding: 14px 16px;
+                margin-bottom: 16px;
+                font-size: 13px;
+                color: var(--text-2);
+            }
+
+            .data-file-info strong {
+                color: var(--primary);
+            }
+
+            .rate-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+                margin-top: 12px;
+            }
+
+            .rate-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+            }
+
+            .rate-item label {
+                font-size: 13px;
+                color: var(--text-2);
+                flex-shrink: 0;
+            }
+
+            .rate-input-wrap {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                width: 100px;
+            }
+
+            .rate-input-wrap input {
+                width: 100%;
+                padding: 7px 10px;
+                border: 1px solid var(--border);
+                border-radius: var(--radius-sm);
+                font-size: 13px;
+                text-align: right;
+                outline: none;
+                transition: var(--transition);
+                font-family: inherit;
+            }
+
+            .rate-input-wrap input:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            }
+
+            .rate-unit {
+                font-size: 12px;
+                color: var(--text-3);
+                flex-shrink: 0;
+            }
+
+            .custom-field-list {
+                margin-top: 12px;
+            }
+
+            .custom-field-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 8px 0;
+                border-bottom: 1px solid var(--border-light);
+            }
+
+            .custom-field-item:last-child {
+                border-bottom: none;
+            }
+
+            .custom-field-name {
+                flex: 1;
+                font-size: 13px;
+                color: var(--text-1);
+            }
+
+            .custom-field-add {
+                display: flex;
+                gap: 8px;
+                margin-top: 10px;
+            }
+
+            .custom-field-add input {
+                flex: 1;
+                padding: 8px 12px;
+                border: 1px solid var(--border);
+                border-radius: var(--radius-sm);
+                font-size: 13px;
+                outline: none;
+                font-family: inherit;
+            }
+
+            .custom-field-add input:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            }
+
+            /* 模态框 */
+            .modal-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(15, 23, 42, 0.5);
+                backdrop-filter: blur(4px);
+                z-index: 1000;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+                animation: fadeIn 0.2s ease;
+            }
+
+            .modal-overlay.show {
+                display: flex;
+            }
+
+            .modal {
+                background: var(--card);
+                border-radius: var(--radius-lg);
+                box-shadow: var(--shadow-lg);
+                width: 100%;
+                max-width: 680px;
+                max-height: 90vh;
+                display: flex;
+                flex-direction: column;
+                animation: modalIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            @keyframes modalIn {
+                from {
+                    opacity: 0;
+                    transform: scale(.96) translateY(10px)
+                }
+
+                to {
+                    opacity: 1;
+                    transform: scale(1) translateY(0)
+                }
+            }
+
+            .modal-header {
+                padding: 20px 24px;
+                border-bottom: 1px solid var(--border-light);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .modal-title {
+                font-size: 17px;
+                font-weight: 700;
+                color: var(--text-1);
+            }
+
+            .modal-close {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                border: none;
+                background: transparent;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                color: var(--text-3);
+                transition: var(--transition);
+            }
+
+            .modal-close:hover {
+                background: var(--border-light);
+                color: var(--text-1);
+            }
+
+            .modal-body {
+                padding: 20px 24px;
+                overflow-y: auto;
+                flex: 1;
+            }
+
+            .modal-footer {
+                padding: 16px 24px;
+                border-top: 1px solid var(--border-light);
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+            }
+
+            .salary-preview {
+                background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
+                border-radius: var(--radius-sm);
+                padding: 14px 18px;
+                margin-top: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .preview-label {
+                font-size: 13px;
+                color: var(--text-2);
+            }
+
+            .preview-value {
+                font-size: 22px;
+                font-weight: 800;
+                color: var(--success);
+                font-variant-numeric: tabular-nums;
+            }
+
+            /* Toast */
+            .toast-container {
+                position: fixed;
+                top: 80px;
+                right: 24px;
+                z-index: 2000;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .toast {
+                background: var(--card);
+                border-radius: var(--radius-sm);
+                box-shadow: var(--shadow-lg);
+                padding: 12px 18px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 13px;
+                font-weight: 500;
+                color: var(--text-1);
+                border-left: 3px solid var(--primary);
+                animation: toastIn 0.3s ease;
+                min-width: 240px;
+            }
+
+            .toast.success {
+                border-left-color: var(--success);
+            }
+
+            .toast.error {
+                border-left-color: var(--danger);
+            }
+
+            .toast.warning {
+                border-left-color: var(--warning);
+            }
+
+            .toast-icon {
+                font-size: 16px;
+            }
+
+            @keyframes toastIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(20px)
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateX(0)
+                }
+            }
+
+            .toast.out {
+                animation: toastOut 0.3s ease forwards;
+            }
+
+            @keyframes toastOut {
+                to {
+                    opacity: 0;
+                    transform: translateX(20px)
+                }
+            }
+            
+            /* 页脚 */
+            .app-footer {
+                max-width: var(--content-max);   /* 原来是 1200px，改为 1100px 与页面内容宽度对齐 */
+                width: 100%;
+                text-align: center;
+                font-size: 0.85rem;
+                color: #5f768b;
+                margin-top: 1rem;
+                padding: 1rem 0;
+                line-height: 1.8;
+            }
+            
+            .app-footer a {
+                color: #1e3a5f;
+                text-decoration: none;
+                margin: 0 6px;
+            }
+            
+            .app-footer a:hover {
+                text-decoration: underline;
+            }
+
+            @media (max-width: 900px) {
+                .stats-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .quick-entries {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .two-col {
+                    grid-template-columns: 1fr;
+                }
+
+                .detail-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .rate-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            @media (max-width: 640px) {
+                .navbar-inner {
+                    padding: 0 16px;
+                }
+
+                .main {
+                    padding: 20px 16px 40px;
+                }
+
+                .nav-link {
+                    padding: 8px 10px;
+                    font-size: 13px;
+                }
+
+                .nav-link span.nav-text {
+                    display: none;
+                }
+
+                .welcome-banner {
+                    padding: 24px;
+                }
+
+                .welcome-title {
+                    font-size: 20px;
+                }
+
+                .data-status {
+                    display: none;
+                }
+
+                .modal {
+                    max-width: 100%;
+                }
+
+                .form-row {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .stat-result-value {
+                    font-size: 28px;
+                }
+
+                .breakdown-name {
+                    width: 64px;
+                    font-size: 12px;
+                }
+
+                .breakdown-value {
+                    width: 72px;
+                    font-size: 12px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <!-- 启动页 -->
+        <div class="splash" id="splash" onclick="enterApp()">
+            <div class="splash-logo">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNEY0NkU1Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzdDM0FFRCIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9InVybCgjZykiLz4KICA8dGV4dCB4PSIzMiIgeT0iNDEiIGZvbnQtZmFtaWx5PSItYXBwbGUtc3lzdGVtLCBCbGlua01hY1N5c3RlbUZvbnQsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+6JaqPC90ZXh0PgogIDxwYXRoIGQ9Ik0xOCA1MCBRMzIgNDQgNDYgNTAiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMi41IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9IjAuNiIvPgo8L3N2Zz4=" alt="logo">
+            </div>
+            <div class="splash-title">薪 记</div>
+            <div class="splash-subtitle">个人工资记账工具</div>
+            <div class="splash-loader"><span></span><span></span><span></span></div>
+            <div class="splash-hint">点击任意位置立即进入</div>
+        </div>
+
+        <!-- 导航 -->
+        <nav class="navbar">
+            <div class="navbar-inner">
+                <div class="logo" onclick="navigate('dashboard')">
+                    <div class="logo-icon">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNEY0NkU1Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzdDM0FFRCIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9InVybCgjZykiLz4KICA8dGV4dCB4PSIzMiIgeT0iNDEiIGZvbnQtZmFtaWx5PSItYXBwbGUtc3lzdGVtLCBCbGlua01hY1N5c3RlbUZvbnQsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+6JaqPC90ZXh0PgogIDxwYXRoIGQ9Ik0xOCA1MCBRMzIgNDQgNDYgNTAiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMi41IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9IjAuNiIvPgo8L3N2Zz4=" alt="logo">
+                    </div>
+                    <span>薪记</span>
+                </div>
+                <div class="nav-links">
+                    <button class="nav-link active" data-page="dashboard" onclick="navigate('dashboard')"><span>🏠</span><span class="nav-text">首页</span></button>
+                    <button class="nav-link" data-page="records" onclick="navigate('records')"><span>📋</span><span class="nav-text">记录</span></button>
+                    <button class="nav-link" data-page="stats" onclick="navigate('stats')"><span>📊</span><span class="nav-text">统计</span>
+                    </button>
+                    <button class="nav-link" data-page="settings" onclick="navigate('settings')"><span>⚙️</span><span class="nav-text">设置</span></button>
+                </div>
+                <div class="nav-right">
+                    <div class="data-status" onclick="navigate('settings')" title="点击管理数据">
+                        <div class="status-dot" id="statusDot"></div>
+                        <span id="statusText">本地存储</span>
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="openRecordModal()">+ 记一笔</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="main">
+            <!-- 首页 -->
+            <section class="page active" id="page-dashboard">
+                <div class="welcome-banner">
+                    <div class="welcome-content">
+                        <div class="welcome-title" id="welcomeText">你好，欢迎使用薪记</div>
+                        <div class="welcome-desc" id="welcomeSub">简洁高效的个人工资记账工具，所有数据保存在本地，隐私安全可控。
+                        </div>
+                        <div class="welcome-actions">
+                            <button class="btn-banner btn-banner-primary" onclick="openRecordModal()">＋ 新增工资记录</button>
+                            <button class="btn-banner btn-banner-ghost" onclick="navigate('stats')">查看统计分析</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="stats-grid" id="yearStats"></div>
+                <div class="quick-entries">
+                    <div class="quick-entry" onclick="openRecordModal()">
+                        <div class="quick-entry-icon e1">➕</div>
+                        <div class="quick-entry-title">新增记录</div>
+                        <div class="quick-entry-desc">录入每月工资明细</div>
+                    </div>
+                    <div class="quick-entry" onclick="navigate('records')">
+                        <div class="quick-entry-icon e2">📋</div>
+                        <div class="quick-entry-title">记录管理</div>
+                        <div class="quick-entry-desc">查看、编辑、删除记录</div>
+                    </div>
+                    <div class="quick-entry" onclick="navigate('stats')">
+                        <div class="quick-entry-icon e3">📊</div>
+                        <div class="quick-entry-title">统计分析</div>
+                        <div class="quick-entry-desc">多维度数据汇总与图表</div>
+                    </div>
+                    <div class="quick-entry" onclick="navigate('settings')">
+                        <div class="quick-entry-icon e4">💾</div>
+                        <div class="quick-entry-title">数据管理</div>
+                        <div class="quick-entry-desc">比例配置、导入导出</div>
+                    </div>
+                </div>
+                <div class="two-col">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">最近记录</div>
+                            <button class="btn btn-secondary btn-sm" onclick="navigate('records')">查看全部</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="recent-list" id="recentList"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">近6个月趋势</div>
+                        </div>
+                        <div class="card-body chart-body">
+                            <div class="chart-container">
+                                <canvas id="trendChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 记录管理 -->
+            <section class="page" id="page-records">
+                <div class="page-header">
+                    <div class="page-title">工资记录</div>
+                    <div class="page-subtitle">管理所有工资记录，支持编辑、删除和详情查看</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">全部记录</div>
+                        <button class="btn btn-primary btn-sm" onclick="openRecordModal()">＋ 新增记录</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="filter-bar">
+                            <div class="form-group"><label>年份筛选</label><select id="filterYear" onchange="renderRecords()">
+                                    <option value="">全部年份</option>
+                                </select></div>
+                            <div class="form-group"><label>收入类型</label><select id="filterType" onchange="renderRecords()">
+                                    <option value="">全部类型</option>
+                                    <option value="salary">工资薪金</option>
+                                    <option value="labor">劳务报酬</option>
+                                    <option value="author">稿酬所得</option>
+                                    <option value="other">其他收入</option>
+                                </select></div>
+                            <div class="form-group"><label>搜索</label><input type="text" id="filterSearch" placeholder="搜索日期或备注..." oninput="renderRecords()"></div>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="data-table" id="recordsTable">
+                                <colgroup>
+                                    <col style="width:120px">
+                                    <col style="width:80px">
+                                    <col style="width:100px">
+                                    <col style="width:100px">
+                                    <col style="width:100px">
+                                    <col style="width:90px">
+                                    <col style="width:90px">
+                                    <col style="width:70px">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>类型</th>
+                                        <th class="num">收入合计</th>
+                                        <th class="num">扣除合计</th>
+                                        <th class="num">到手工资</th>
+                                        <th class="num">个人所得税</th>
+                                        <th class="num">住房公积金</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recordsTbody"></tbody>
+                            </table>
+                        </div>
+                        <div id="recordsEmpty" class="empty-state" style="display:none;">
+                            <div class="empty-state-icon">📭</div>
+                            <div class="empty-state-text">还没有工资记录</div>
+                            <button class="btn btn-primary" onclick="openRecordModal()">＋ 添加第一条记录</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 统计分析 -->
+            <section class="page" id="page-stats">
+                <div class="page-header">
+                    <div class="page-title">统计分析</div>
+                    <div class="page-subtitle">按时间段和项目类型统计总额，可视化展示收入趋势</div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stat-controls">
+                            <div class="form-group"><label>起始日期</label><input type="date" id="statStart"></div>
+                            <div class="form-group"><label>结束日期</label><input type="date" id="statEnd"></div>
+                            <div class="form-group"><label>统计项目</label><select id="statItem">
+                                    <option value="totalIncome">收入合计</option>
+                                    <option value="netSalary">到手工资</option>
+                                    <option value="baseSalary">基本工资</option>
+                                    <option value="performanceBonus">绩效奖金</option>
+                                    <option value="yearEndBonus">年终奖金</option>
+                                    <option value="otherAllowance">其他补贴</option>
+                                    <option value="totalDeduction">扣除合计</option>
+                                    <option value="pension">养老保险</option>
+                                    <option value="medical">医疗保险</option>
+                                    <option value="unemployment">失业保险</option>
+                                    <option value="housingFund">住房公积金</option>
+                                    <option value="incomeTax">个人所得税</option>
+                                    <option value="otherDeduction">其他扣款</option>
+                                </select></div>
+                            <button class="btn btn-primary" onclick="runStats()">开始统计</button>
+                            <button class="btn btn-secondary" onclick="setStatThisYear()">今年</button>
+                            <button class="btn btn-secondary" onclick="setStatAll()">全部</button>
+                        </div>
+                        <div class="stat-result-card" id="statResultCard" style="display:none;">
+                            <div>
+                                <div class="stat-result-label" id="statResultLabel">收入合计</div>
+                                <div class="stat-result-value" id="statResultValue">¥0.00</div>
+                            </div>
+                            <div class="stat-result-meta">
+                                <div id="statResultRange"></div>
+                                <div id="statResultCount"></div>
+                                <div id="statResultAvg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="two-col" style="margin-top:20px;">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">月度趋势图</div>
+                        </div>
+                        <div class="card-body chart-body">
+                            <div class="chart-container">
+                                <canvas id="statsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">收入构成明细</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="breakdown-list" id="breakdownList"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 设置 -->
+            <section class="page" id="page-settings">
+                <div class="page-header">
+                    <div class="page-title">设置与数据管理</div>
+                    <div class="page-subtitle">管理扣除比例、自定义项目、数据存储和应用设置</div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">💾 数据存储</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="data-file-info" id="dataFileInfo">当前使用 <strong>浏览器本地存储</strong>，数据保存在当前浏览器中。建议定期导出备份。</div>
+                            <div class="settings-item">
+                                <div class="settings-info">
+                                    <div class="settings-name">关联本地数据文件</div>
+                                    <div class="settings-desc">数据保存到指定 JSON 文件，每次修改自动写入（需 Chrome/Edge）</div>
+                                </div>
+                                <div class="settings-actions">
+                                    <button class="btn btn-primary btn-sm" onclick="connectDataFile()">选择文件</button>
+                                    <button class="btn btn-success btn-sm" onclick="createDataFile()">新建文件</button>
+                                </div>
+                            </div>
+                            <div class="settings-item">
+                                <div class="settings-info">
+                                    <div class="settings-name">导出数据</div>
+                                    <div class="settings-desc">将所有记录导出为 JSON 文件备份</div>
+                                </div>
+                                <div class="settings-actions">
+                                    <button class="btn btn-outline btn-sm" onclick="exportData()">导出 JSON</button>
+                                </div>
+                            </div>
+                            <div class="settings-item">
+                                <div class="settings-info">
+                                    <div class="settings-name">导入数据</div>
+                                    <div class="settings-desc">从 JSON 文件导入记录，合并到现有数据</div>
+                                </div>
+                                <div class="settings-actions">
+                                    <button class="btn btn-outline btn-sm" onclick="document.getElementById('importFile').click()">导入 JSON</button>
+                                    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+                                </div>
+                            </div>
+                            <div class="settings-item">
+                                <div class="settings-info">
+                                    <div class="settings-name">清空所有数据</div>
+                                    <div class="settings-desc">删除所有工资记录，不可恢复，请先备份</div>
+                                </div>
+                                <div class="settings-actions">
+                                    <button class="btn btn-danger btn-sm" onclick="clearAllData()">清空数据</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">💰 扣除比例配置</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="settings-item">
+                                <div class="settings-info">
+                                    <div class="settings-name">社保/公积金基数</div>
+                                    <div class="settings-desc">填写0则按基本工资作为基数计算</div>
+                                </div>
+                                <div class="settings-actions">
+                                    <div class="rate-input-wrap"><input type="number" id="setBase" min="0" step="100" placeholder="0"><span class="rate-unit">元</span></div>
+                                </div>
+                            </div>
+                            <div class="rate-grid">
+                                <div class="rate-item"><label>养老保险（个人）</label>
+                                    <div class="rate-input-wrap"><input type="number" id="setPension" min="0" max="100" step="0.1"><span class="rate-unit">%</span></div>
+                                </div>
+                                <div class="rate-item"><label>医疗保险（个人）</label>
+                                    <div class="rate-input-wrap"><input type="number" id="setMedical" min="0" max="100" step="0.1"><span class="rate-unit">%</span></div>
+                                </div>
+                                <div class="rate-item"><label>失业保险（个人）</label>
+                                    <div class="rate-input-wrap"><input type="number" id="setUnemployment" min="0" max="100" step="0.1"><span class="rate-unit">%</span></div>
+                                </div>
+                                <div class="rate-item"><label>住房公积金（个人）</label>
+                                    <div class="rate-input-wrap"><input type="number" id="setHousingFund" min="0" max="100" step="0.5"><span class="rate-unit">%</span></div>
+                                </div>
+                            </div>
+                            <div class="settings-item" style="margin-top:16px;">
+                                <div class="settings-info">
+                                    <div class="settings-name">个税起征点</div>
+                                    <div class="settings-desc">工资薪金个税月度起征额</div>
+                                </div>
+                                <div class="settings-actions">
+                                    <div class="rate-input-wrap"><input type="number" id="setThreshold" min="0" step="100"><span class="rate-unit">元</span></div>
+                                </div>
+                            </div>
+                            <div class="settings-item">
+                                <div class="settings-info">
+                                    <div class="settings-name">专项附加扣除</div>
+                                    <div class="settings-desc">子女教育、房贷、赡养老人等月度扣除总额</div>
+                                </div>
+                                <div class="settings-actions">
+                                    <div class="rate-input-wrap"><input type="number" id="setSpecialDeduct" min="0" step="100"><span class="rate-unit">元</span></div>
+                                </div>
+                            </div>
+                            <div style="margin-top:16px;text-align:right;">
+                                <button class="btn btn-primary btn-sm" onclick="saveRateSettings()">保存比例设置</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">➕ 自定义收入项目</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="custom-field-list" id="customIncomeList"></div>
+                            <div class="custom-field-add">
+                                <input type="text" id="newIncomeField" placeholder="输入项目名称，如：交通补贴、餐补...">
+                                <button class="btn btn-primary btn-sm" onclick="addCustomField('income')">添加</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">➖ 自定义扣除项目</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="custom-field-list" id="customDeductionList"></div>
+                            <div class="custom-field-add">
+                                <input type="text" id="newDeductionField" placeholder="输入项目名称，如：企业年金、工会费...">
+                                <button class="btn btn-primary btn-sm" onclick="addCustomField('deduction')">添加</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">📈 数据概览</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="settings-item">
+                                <div class="settings-info">
+                                    <div class="settings-name">记录总数</div>
+                                    <div class="settings-desc">当前已保存的工资记录数量</div>
+                                </div>
+                                <div class="settings-name" id="overviewCount">0 条</div>
+                            </div>
+                            <div class="settings-item">
+                                <div class="settings-info">
+                                    <div class="settings-name">时间跨度</div>
+                                    <div class="settings-desc">最早记录到最近记录的时间范围</div>
+                                </div>
+                                <div class="settings-name" id="overviewRange">-</div>
+                            </div>
+                            <div class="settings-item">
+                                <div class="settings-info">
+                                    <div class="settings-name">累计实发工资</div>
+                                    <div class="settings-desc">所有记录的实发工资总和</div>
+                                </div>
+                                <div class="settings-name" id="overviewTotal">¥0.00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">ℹ️ 关于</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="settings-item">
+                                <div class="settings-info">
+                                    <div class="settings-name">薪记 · 个人工资记账</div>
+                                    <div class="settings-desc">版本 2.3.0 · 纯前端单文件应用 · 数据完全本地存储</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <footer class="app-footer">
+                <div style="line-height: 1.8">
+                    <a href="https://github.com/theFool-wn" target="_blank">GitHub</a> |
+                    <a href="https://wangnan.net" target="_blank">HomePage</a> |
+                    <a href="mailto:me@wangnan.net">Email</a>
+                </div>
+                <div style="line-height: 1.8">&copy; 2026 Wang Nan. All rights reserved.</div>
+            </footer>
+        </div>
+
+        <!-- 模态框 -->
+        <div class="modal-overlay" id="recordModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <div class="modal-title" id="modalTitle">新增工资记录</div>
+                    <button class="modal-close" onclick="closeRecordModal()">✕</button>
+                </div>
+                <div class="modal-body">
+                    <form id="recordForm" onsubmit="return false;">
+                        <input type="hidden" id="editId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>日期 *</label>
+                                <input type="date" id="f_date" required>
+                            </div>
+                            <div class="form-group">
+                                <label>收入类型 *</label>
+                                <select id="f_incomeType" onchange="onIncomeTypeChange()">
+                                    <option value="salary">工资薪金</option>
+                                    <option value="labor">劳务报酬</option>
+                                    <option value="author">稿酬所得</option>
+                                    <option value="other">其他收入</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="switch-wrap">
+                            <label class="switch"><input type="checkbox" id="f_autoCalc" checked onchange="onAutoCalcChange()"><span class="switch-slider"></span></label>
+                            <span class="switch-label">自动计算社保、公积金、个税（按设置中的比例）</span>
+                        </div>
+                        <div class="calc-hint" id="calcHint" style="display:none;">ℹ️
+                            已开启自动计算，社保/公积金/个税将根据设置的比例自动填充，可手动修改
+                        </div>
+                        <div class="form-section-title">💰 收入项</div>
+                        <div class="form-row">
+                            <div class="form-group"><label>基本工资/税前收入 *</label><input type="number" id="f_baseSalary" step="0.01" min="0" placeholder="0.00" required oninput="onAmountInput()"></div>
+                            <div class="form-group"><label>绩效奖金</label><input type="number" id="f_performanceBonus" step="0.01" min="0" placeholder="0.00" oninput="onAmountInput()"></div>
+                            <div class="form-group"><label>年终奖金</label><input type="number" id="f_yearEndBonus" step="0.01" min="0" placeholder="0.00" oninput="onAmountInput()"></div>
+                            <div class="form-group"><label>其他补贴</label><input type="number" id="f_otherAllowance" step="0.01" min="0" placeholder="0.00" oninput="onAmountInput()"></div>
+                        </div>
+                        <div id="customIncomeFields"></div>
+                        <div class="form-section-title">📉 扣除项</div>
+                        <div class="form-row">
+                            <div class="form-group"><label>养老保险</label><input type="number" id="f_pension" step="0.01" min="0" placeholder="0.00" oninput="updatePreview()"></div>
+                            <div class="form-group"><label>医疗保险</label><input type="number" id="f_medical" step="0.01" min="0" placeholder="0.00" oninput="updatePreview()"></div>
+                            <div class="form-group"><label>失业保险</label><input type="number" id="f_unemployment" step="0.01" min="0" placeholder="0.00" oninput="updatePreview()"></div>
+                            <div class="form-group"><label>住房公积金</label><input type="number" id="f_housingFund" step="0.01" min="0" placeholder="0.00" oninput="updatePreview()"></div>
+                            <div class="form-group"><label>个人所得税</label><input type="number" id="f_incomeTax" step="0.01" min="0" placeholder="0.00" oninput="updatePreview()"></div>
+                            <div class="form-group"><label>其他扣款</label><input type="number" id="f_otherDeduction" step="0.01" min="0" placeholder="0.00" oninput="updatePreview()"></div>
+                        </div>
+                        <div id="customDeductionFields"></div>
+                        <div class="form-group" style="margin-top:14px;">
+                            <label>备注</label>
+                            <input type="text" id="f_note" placeholder="可选，如：补发工资、调薪等">
+                        </div>
+                        <div class="salary-preview">
+                            <div class="preview-label">预计到手工资</div>
+                            <div class="preview-value" id="previewValue">¥0.00</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeRecordModal()">取消</button>
+                    <button class="btn btn-primary" onclick="saveRecord()">保存记录</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast-container" id="toastContainer"></div>
+
+        <script>
+            const LOGO_DATAURI = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNEY0NkU1Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzdDM0FFRCIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9InVybCgjZykiLz4KICA8dGV4dCB4PSIzMiIgeT0iNDEiIGZvbnQtZmFtaWx5PSItYXBwbGUtc3lzdGVtLCBCbGlua01hY1N5c3RlbUZvbnQsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+6JaqPC90ZXh0PgogIDxwYXRoIGQ9Ik0xOCA1MCBRMzIgNDQgNDYgNTAiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMi41IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9IjAuNiIvPgo8L3N2Zz4=";
+            const STORAGE_KEY = 'salary_tracker_data_v2';
+            const SETTINGS_KEY = 'salary_tracker_settings_v2';
+            const APP_VERSION = '2.3.0';
+            const INCOME_FIELDS = ['baseSalary', 'performanceBonus', 'yearEndBonus', 'otherAllowance'];
+            const DEDUCT_FIELDS = ['pension', 'medical', 'unemployment', 'housingFund', 'incomeTax', 'otherDeduction'];
+            const FIELD_LABELS = {
+                date: '日期',
+                incomeType: '收入类型',
+                baseSalary: '基本工资',
+                performanceBonus: '绩效奖金',
+                yearEndBonus: '年终奖金',
+                otherAllowance: '其他补贴',
+                pension: '养老保险',
+                medical: '医疗保险',
+                unemployment: '失业保险',
+                housingFund: '住房公积金',
+                incomeTax: '个人所得税',
+                otherDeduction: '其他扣款',
+                totalIncome: '收入合计',
+                totalDeduction: '扣除合计',
+                netSalary: '到手工资'
+            };
+            const INCOME_TYPE_LABELS = {
+                salary: '工资薪金',
+                labor: '劳务报酬',
+                author: '稿酬所得',
+                other: '其他收入'
+            };
+            const TAX_BRACKETS = [{
+                max: 3000,
+                rate: .03,
+                deduction: 0
+            }, {
+                max: 12000,
+                rate: .10,
+                deduction: 210
+            }, {
+                max: 25000,
+                rate: .20,
+                deduction: 1410
+            }, {
+                max: 35000,
+                rate: .25,
+                deduction: 2660
+            }, {
+                max: 55000,
+                rate: .30,
+                deduction: 4410
+            }, {
+                max: 80000,
+                rate: .35,
+                deduction: 7160
+            }, {
+                max: Infinity,
+                rate: .45,
+                deduction: 15160
+            }];
+            const LABOR_TAX_BRACKETS = [{
+                max: 20000,
+                rate: .20,
+                deduction: 0
+            }, {
+                max: 50000,
+                rate: .30,
+                deduction: 2000
+            }, {
+                max: Infinity,
+                rate: .40,
+                deduction: 7000
+            }];
+            const DEFAULT_SETTINGS = {
+                storageMode: 'local',
+                rates: {
+                    base: 0,
+                    pension: 8,
+                    medical: 2,
+                    unemployment: .5,
+                    housingFund: 12,
+                    threshold: 5000,
+                    specialDeduction: 0
+                },
+                customFields: {
+                    income: [],
+                    deduction: []
+                }
+            };
+
+            let records = [],
+                settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),
+                fileHandle = null,
+                currentPage = 'dashboard',
+                splashTimer = null;
+
+            function enterApp() {
+                const s = document.getElementById('splash');
+                if (s.classList.contains('hide')) return;
+                s.classList.add('hide');
+                if (splashTimer) clearTimeout(splashTimer);
+                setTimeout(() => {
+                    s.style.display = 'none';
+                }, 600);
+            }
+
+            function loadSettings() {
+                try {
+                    const raw = localStorage.getItem(SETTINGS_KEY);
+                    if (raw) {
+                        const s = JSON.parse(raw);
+                        settings = Object.assign(JSON.parse(JSON.stringify(DEFAULT_SETTINGS)), s);
+                        settings.rates = Object.assign({}, DEFAULT_SETTINGS.rates, s.rates || {});
+                        settings.customFields = Object.assign({
+                            income: [],
+                            deduction: []
+                        }, s.customFields || {});
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+
+            function saveSettings() {
+                localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+                if (settings.storageMode === 'file' && fileHandle) {
+                    saveData();
+                }
+            }
+
+            function saveRateSettings() {
+                settings.rates.base = parseFloat(document.getElementById('setBase').value) || 0;
+                settings.rates.pension = parseFloat(document.getElementById('setPension').value) || 0;
+                settings.rates.medical = parseFloat(document.getElementById('setMedical').value) || 0;
+                settings.rates.unemployment = parseFloat(document.getElementById('setUnemployment').value) || 0;
+                settings.rates.housingFund = parseFloat(document.getElementById('setHousingFund').value) || 0;
+                settings.rates.threshold = parseFloat(document.getElementById('setThreshold').value) || 0;
+                settings.rates.specialDeduction = parseFloat(document.getElementById('setSpecialDeduct').value) || 0;
+                saveSettings();
+                showToast('扣除比例设置已保存', 'success');
+            }
+
+            function loadRateSettingsToForm() {
+                document.getElementById('setBase').value = settings.rates.base || '';
+                document.getElementById('setPension').value = settings.rates.pension;
+                document.getElementById('setMedical').value = settings.rates.medical;
+                document.getElementById('setUnemployment').value = settings.rates.unemployment;
+                document.getElementById('setHousingFund').value = settings.rates.housingFund;
+                document.getElementById('setThreshold').value = settings.rates.threshold;
+                document.getElementById('setSpecialDeduct').value = settings.rates.specialDeduction;
+            }
+
+            function renderCustomFieldLists() {
+                const render = (type, id) => {
+                    const c = document.getElementById(id),
+                        fields = settings.customFields[type];
+                    if (fields.length === 0) {
+                        c.innerHTML = '<div style="text-align:center;padding:16px;color:var(--text-3);font-size:13px;">暂无自定义项目</div>';
+                        return;
+                    }
+                    c.innerHTML = fields.map((f, i) => `<div class="custom-field-item"><span class="custom-field-name">${escapeHtml(f.name)}</span><button class="icon-btn danger" title="删除" onclick="removeCustomField('${type}',${i})">🗑️</button></div>`).join('');
+                };
+                render('income', 'customIncomeList');
+                render('deduction', 'customDeductionList');
+            }
+
+            function addCustomField(type) {
+                const inputId = type === 'income' ? 'newIncomeField' : 'newDeductionField';
+                const name = document.getElementById(inputId).value.trim();
+                if (!name) {
+                    showToast('请输入项目名称', 'warning');
+                    return;
+                }
+                if (settings.customFields[type].some(f => f.name === name)) {
+                    showToast('该项目已存在', 'warning');
+                    return;
+                }
+                settings.customFields[type].push({
+                    name
+                });
+                saveSettings();
+                document.getElementById(inputId).value = '';
+                renderCustomFieldLists();
+                showToast(`已添加自定义项目：${name}`, 'success');
+            }
+
+            function removeCustomField(type, index) {
+                const name = settings.customFields[type][index].name;
+                if (!confirm(`确定删除自定义项目「${name}」吗？\n\n已有工资记录中的该项目数据也将被一并删除。`)) return;
+                settings.customFields[type].splice(index, 1);
+                let cleaned = 0;
+                records.forEach(r => {
+                    if (r.customFields && r.customFields[type] && name in r.customFields[type]) {
+                        delete r.customFields[type][name];
+                        cleaned++;
+                    }
+                });
+                saveSettings();
+                renderCustomFieldLists();
+                showToast(cleaned > 0 ? `已删除，同步清理了 ${cleaned} 条记录中的数据` : '已删除', 'success');
+            }
+
+            function renderCustomFieldsInForm(record) {
+                const render = (type, containerId) => {
+                    const c = document.getElementById(containerId),
+                        fields = settings.customFields[type];
+                    if (fields.length === 0) {
+                        c.innerHTML = '';
+                        return;
+                    }
+                    c.innerHTML = '<div class="form-row" style="margin-top:10px;">' + fields.map(f => {
+                        const val = record && record.customFields && record.customFields[type] ? (record.customFields[type][f.name] || '') : '';
+                        const safe = f.name.replace(/[^a-zA-Z0-9]/g, '_');
+                        return `<div class="form-group"><label>${escapeHtml(f.name)}</label><input type="number" id="cf_${type}_${safe}" data-field-name="${escapeHtml(f.name)}" data-field-type="${type}" step="0.01" min="0" placeholder="0.00" value="${val}" oninput="updatePreview()"></div>`;
+                    }).join('') + '</div>';
+                };
+                render('income', 'customIncomeFields');
+                render('deduction', 'customDeductionFields');
+            }
+
+            function collectCustomFieldsFromForm() {
+                const result = {
+                    income: {},
+                    deduction: {}
+                };
+                ['income', 'deduction'].forEach(type => {
+                    document.querySelectorAll(`input[data-field-type="${type}"]`).forEach(input => {
+                        const name = input.dataset.fieldName,
+                            val = parseFloat(input.value) || 0;
+                        if (val > 0) result[type][name] = val;
+                    });
+                });
+                return result;
+            }
+
+            function calcIncomeTax(taxable) {
+                if (taxable <= 0) return 0;
+                for (const b of TAX_BRACKETS)
+                    if (taxable <= b.max) return Math.max(0, taxable * b.rate - b.deduction);
+                return 0;
+            }
+
+            function calcLaborTax(income) {
+                const taxable = income <= 4000 ? income - 800 : income * 0.8;
+                if (taxable <= 0) return 0;
+                for (const b of LABOR_TAX_BRACKETS)
+                    if (taxable <= b.max) return Math.max(0, taxable * b.rate - b.deduction);
+                return 0;
+            }
+
+            function autoCalculate() {
+                const baseSalary = parseFloat(document.getElementById('f_baseSalary').value) || 0;
+                const incomeType = document.getElementById('f_incomeType').value;
+                const base = settings.rates.base || baseSalary;
+                let pension = 0,
+                    medical = 0,
+                    unemployment = 0,
+                    housingFund = 0,
+                    incomeTax = 0;
+                if (incomeType === 'salary') {
+                    pension = base * settings.rates.pension / 100;
+                    medical = base * settings.rates.medical / 100;
+                    unemployment = base * settings.rates.unemployment / 100;
+                    housingFund = base * settings.rates.housingFund / 100;
+                    const totalIncome = calcFormTotalIncome();
+                    const socialTotal = pension + medical + unemployment + housingFund;
+                    const taxable = totalIncome - socialTotal - settings.rates.threshold - settings.rates.specialDeduction;
+                    incomeTax = calcIncomeTax(taxable);
+                } else if (incomeType === 'labor') {
+                    incomeTax = calcLaborTax(baseSalary);
+                } else if (incomeType === 'author') {
+                    const taxable = baseSalary > 4000 ? baseSalary * 0.8 * 0.7 : (baseSalary - 800) * 0.7;
+                    incomeTax = Math.max(0, taxable * 0.2);
+                }
+                document.getElementById('f_pension').value = pension.toFixed(2);
+                document.getElementById('f_medical').value = medical.toFixed(2);
+                document.getElementById('f_unemployment').value = unemployment.toFixed(2);
+                document.getElementById('f_housingFund').value = housingFund.toFixed(2);
+                document.getElementById('f_incomeTax').value = incomeTax.toFixed(2);
+            }
+
+            function calcFormTotalIncome() {
+                let total = 0;
+                INCOME_FIELDS.forEach(f => total += parseFloat(document.getElementById('f_' + f).value) || 0);
+                document.querySelectorAll('input[data-field-type="income"]').forEach(i => total += parseFloat(i.value) || 0);
+                return total;
+            }
+
+            function calcFormTotalDeduction() {
+                let total = 0;
+                DEDUCT_FIELDS.forEach(f => total += parseFloat(document.getElementById('f_' + f).value) || 0);
+                document.querySelectorAll('input[data-field-type="deduction"]').forEach(i => total += parseFloat(i.value) || 0);
+                return total;
+            }
+
+            function onAmountInput() {
+                if (document.getElementById('f_autoCalc').checked) autoCalculate();
+                updatePreview();
+            }
+
+            function onIncomeTypeChange() {
+                if (document.getElementById('f_autoCalc').checked) autoCalculate();
+                updatePreview();
+            }
+
+            function onAutoCalcChange() {
+                const checked = document.getElementById('f_autoCalc').checked;
+                document.getElementById('calcHint').style.display = checked ? 'flex' : 'none';
+                if (checked) autoCalculate();
+                updatePreview();
+            }
+
+            function updatePreview() {
+                document.getElementById('previewValue').textContent = `¥${formatNum(calcFormTotalIncome() - calcFormTotalDeduction())}`;
+            }
+
+            function loadData() {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    if (raw) {
+                        records = JSON.parse(raw).records || [];
+                        records.forEach(r => {
+                            if (!r.id) r.id = genId();
+                        });
+                    }
+                } catch (e) {
+                    records = [];
+                }
+            }
+            async function saveData() {
+                const data = {
+                    version: APP_VERSION,
+                    updatedAt: new Date().toISOString(),
+                    records,
+                    settings
+                };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                if (settings.storageMode === 'file' && fileHandle) {
+                    try {
+                        const w = await fileHandle.createWritable();
+                        await w.write(JSON.stringify(data, null, 2));
+                        await w.close();
+                        return true;
+                    } catch (e) {
+                        showToast('写入文件失败，已保存到本地存储', 'warning');
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            function calcRecord(r) {
+                let income = INCOME_FIELDS.reduce((s, f) => s + (parseFloat(r[f]) || 0), 0);
+                let deduct = DEDUCT_FIELDS.reduce((s, f) => s + (parseFloat(r[f]) || 0), 0);
+                if (r.customFields) {
+                    if (r.customFields.income) income += Object.values(r.customFields.income).reduce((s, v) => s + (parseFloat(v) || 0), 0);
+                    if (r.customFields.deduction) deduct += Object.values(r.customFields.deduction).reduce((s, v) => s + (parseFloat(v) || 0), 0);
+                }
+                return {
+                    totalIncome: income,
+                    totalDeduction: deduct,
+                    netSalary: income - deduct
+                };
+            }
+
+            function genId() {
+                return Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
+            }
+
+            function supportsFileAPI() {
+                return 'showOpenFilePicker' in window && 'showSaveFilePicker' in window;
+            }
+            async function connectDataFile() {
+                if (!supportsFileAPI()) {
+                    showToast('当前浏览器不支持文件关联，请使用 Chrome/Edge', 'error');
+                    return;
+                }
+                try {
+                    [fileHandle] = await window.showOpenFilePicker({
+                        types: [{
+                            description: 'JSON 数据文件',
+                            accept: {
+                                'application/json': ['.json']
+                            }
+                        }],
+                        multiple: false
+                    });
+                    await loadFromFile();
+                    settings.storageMode = 'file';
+                    saveSettings();
+                    updateStatusUI();
+                    showToast('数据文件已关联', 'success');
+                    refreshAll();
+                } catch (e) {
+                    if (e.name !== 'AbortError') showToast('打开文件失败: ' + e.message, 'error');
+                }
+            }
+            async function createDataFile() {
+                if (!supportsFileAPI()) {
+                    showToast('当前浏览器不支持文件关联，请使用 Chrome/Edge', 'error');
+                    return;
+                }
+                try {
+                    fileHandle = await window.showSaveFilePicker({
+                        suggestedName: 'salary-data.json',
+                        types: [{
+                            description: 'JSON 数据文件',
+                            accept: {
+                                'application/json': ['.json']
+                            }
+                        }]
+                    });
+                    settings.storageMode = 'file';
+                    await saveData();
+                    saveSettings();
+                    updateStatusUI();
+                    showToast('数据文件已创建', 'success');
+                } catch (e) {
+                    if (e.name !== 'AbortError') showToast('创建文件失败: ' + e.message, 'error');
+                }
+            }
+            async function loadFromFile() {
+                if (!fileHandle) return;
+                try {
+                    const file = await fileHandle.getFile(),
+                        text = await file.text();
+                    if (text.trim()) {
+                        const data = JSON.parse(text);
+                        records = data.records || [];
+                        records.forEach(r => {
+                            if (!r.id) r.id = genId();
+                        });
+                        if (data.settings) {
+                            settings.rates = Object.assign({}, DEFAULT_SETTINGS.rates, data.settings.rates || {});
+                            settings.customFields = Object.assign({
+                                income: [],
+                                deduction: []
+                            }, data.settings.customFields || {});
+                            if (data.settings.storageMode) settings.storageMode = data.settings.storageMode;
+                            saveSettings();
+                        }
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                    }
+                } catch (e) {
+                    showToast('读取文件失败: ' + e.message, 'error');
+                }
+            }
+
+            function updateStatusUI() {
+                const dot = document.getElementById('statusDot'),
+                    text = document.getElementById('statusText'),
+                    info = document.getElementById('dataFileInfo');
+                if (settings.storageMode === 'file' && fileHandle) {
+                    dot.className = 'status-dot';
+                    text.textContent = fileHandle.name || '数据文件';
+                    info.innerHTML = `当前使用 <strong>本地文件存储</strong>：${fileHandle.name || ''}。所有修改会自动写入该文件。`;
+                } else {
+                    dot.className = 'status-dot offline';
+                    text.textContent = '本地存储';
+                    info.innerHTML = `当前使用 <strong>浏览器本地存储</strong>，数据保存在当前浏览器中。建议定期导出备份，清理浏览器数据可能导致记录丢失。`;
+                }
+            }
+
+            function navigate(page) {
+                currentPage = page;
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById('page-' + page).classList.add('active');
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.page === page));
+                if (page === 'dashboard') renderDashboard();
+                if (page === 'records') renderRecords();
+                if (page === 'stats') {
+                    initStatDefaults();
+                    renderStatsChart();
+                }
+                if (page === 'settings') renderSettings();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+
+            function renderDashboard() {
+                const now = new Date(),
+                    year = now.getFullYear(),
+                    hour = now.getHours();
+                let greet = hour < 6 ? '夜深了' : hour < 12 ? '早上好' : hour < 14 ? '中午好' : hour < 18 ? '下午好' : '晚上好';
+                document.getElementById('welcomeText').textContent = `${greet}，欢迎使用薪记`;
+                document.getElementById('welcomeSub').textContent = records.length > 0 ? `已记录 ${records.length} 条工资数据，继续保持记账好习惯。` : '简洁高效的个人工资记账工具，所有数据保存在本地，隐私安全可控。';
+
+                const yearRecords = records.filter(r => r.date && r.date.startsWith(year + '-'));
+                const stats = [{
+                        label: `${year}年 收入合计`,
+                        field: 'totalIncome',
+                        icon: 'income',
+                        emoji: '💰'
+                    },
+                    {
+                        label: `${year}年 到手工资`,
+                        field: 'netSalary',
+                        icon: 'net',
+                        emoji: '💵'
+                    },
+                    {
+                        label: `${year}年 个人所得税`,
+                        field: 'incomeTax',
+                        icon: 'tax',
+                        emoji: '📊'
+                    },
+                    {
+                        label: `${year}年 住房公积金`,
+                        field: 'housingFund',
+                        icon: 'fund',
+                        emoji: '🏠'
+                    }
+                ];
+                document.getElementById('yearStats').innerHTML = stats.map(s => {
+                    let total = 0;
+                    yearRecords.forEach(r => {
+                        if (s.field === 'totalIncome' || s.field === 'netSalary') total += calcRecord(r)[s.field];
+                        else total += parseFloat(r[s.field]) || 0;
+                    });
+                    const avg = yearRecords.length ? total / yearRecords.length : 0;
+                    return `<div class="stat-card" onclick="navigate('stats')"><div class="stat-card-header"><span class="stat-label">${s.label}</span><div class="stat-icon ${s.icon}">${s.emoji}</div></div><div class="stat-value">¥${formatNum(total)}</div><div class="stat-sub">条均 ¥${formatNum(avg)} · ${yearRecords.length} 条</div></div>`;
+                }).join('');
+
+                const recent = [...records].sort((a, b) => (b.date || '').localeCompare(a.date || '')).slice(0, 5);
+                const list = document.getElementById('recentList');
+                if (recent.length === 0) {
+                    list.innerHTML = '<div class="empty-state" style="padding:30px 0;"><div class="empty-state-text" style="font-size:13px;">暂无记录</div></div>';
+                } else {
+                    list.innerHTML = recent.map(r => {
+                        const c = calcRecord(r),
+                            [y, m, d] = (r.date || '0000-00-00').split('-');
+                        const tc = 'type-' + (r.incomeType || 'salary'),
+                            tl = INCOME_TYPE_LABELS[r.incomeType || 'salary'] || '工资薪金';
+                        return `<div class="recent-item" onclick="viewRecord('${r.id}')"><div class="recent-left"><div class="recent-date-badge"><span>${d}</span>${m}月</div><div class="recent-info"><div class="recent-date">${r.date}<span class="recent-type-tag ${tc}">${tl}</span></div><div class="recent-detail">${r.note || '工资发放'}</div></div></div><div class="recent-right"><div class="recent-net">¥${formatNum(c.netSalary)}</div><div class="recent-gross">总收入 ¥${formatNum(c.totalIncome)}</div></div></div>`;
+                    }).join('');
+                }
+                renderTrendChart();
+            }
+
+            function renderTrendChart() {
+                const canvas = document.getElementById('trendChart');
+                if (!canvas) return;
+                const monthly = aggregateRecordsByMonth(records);
+                const recent = monthly.slice(-6);
+                drawLineChart(canvas, recent, ['totalIncome', 'netSalary'], ['#6366F1', '#10B981']);
+            }
+
+            function viewRecord(id) {
+                navigate('records');
+                setTimeout(() => toggleDetail(id), 100);
+            }
+
+            function renderRecords() {
+                const yearSelect = document.getElementById('filterYear');
+                const years = [...new Set(records.map(r => r.date ? r.date.substring(0, 4) : '').filter(Boolean))].sort().reverse();
+                const cv = yearSelect.value;
+                yearSelect.innerHTML = '<option value="">全部年份</option>' + years.map(y => `<option value="${y}">${y}年</option>`).join('');
+                yearSelect.value = cv;
+                const fy = yearSelect.value,
+                    ft = document.getElementById('filterType').value,
+                    search = document.getElementById('filterSearch').value.toLowerCase();
+                let filtered = [...records];
+                if (fy) filtered = filtered.filter(r => r.date && r.date.startsWith(fy));
+                if (ft) filtered = filtered.filter(r => (r.incomeType || 'salary') === ft);
+                if (search) filtered = filtered.filter(r => (r.date && r.date.includes(search)) || (r.note && r.note.toLowerCase().includes(search)));
+                filtered.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+                const tbody = document.getElementById('recordsTbody'),
+                    empty = document.getElementById('recordsEmpty');
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '';
+                    empty.style.display = 'block';
+                    return;
+                }
+                empty.style.display = 'none';
+                tbody.innerHTML = filtered.map(r => {
+                    const c = calcRecord(r),
+                        tl = INCOME_TYPE_LABELS[r.incomeType || 'salary'] || '工资薪金';
+                    return `<tr onclick="toggleDetail('${r.id}')"><td><span class="date-tag">${r.date || '-'}</span></td><td>${tl}</td><td class="num">¥${formatNum(c.totalIncome)}</td><td class="num" style="color:var(--danger)">-¥${formatNum(c.totalDeduction)}</td><td class="num net-positive">¥${formatNum(c.netSalary)}</td><td class="num">¥${formatNum(parseFloat(r.incomeTax) || 0)}</td><td class="num">¥${formatNum(parseFloat(r.housingFund) || 0)}</td><td><div class="row-actions"><button class="icon-btn" title="编辑" onclick="event.stopPropagation();editRecord('${r.id}')">✏️</button><button class="icon-btn danger" title="删除" onclick="event.stopPropagation();deleteRecord('${r.id}')">🗑️</button></div></td></tr>
+        <tr class="detail-row" id="detail-${r.id}"><td colspan="8"><div class="detail-content"><div class="detail-grid">
+        ${INCOME_FIELDS.map(f => `<div><div class="detail-item-label">${FIELD_LABELS[f]}</div><div class="detail-item-value income">¥${formatNum(parseFloat(r[f]) || 0)}</div></div>`).join('')}
+        ${(r.customFields && r.customFields.income ? Object.entries(r.customFields.income) : []).map(([k, v]) => `<div><div class="detail-item-label">${escapeHtml(k)}</div><div class="detail-item-value income">¥${formatNum(parseFloat(v) || 0)}</div></div>`).join('')}
+        ${DEDUCT_FIELDS.map(f => `<div><div class="detail-item-label">${FIELD_LABELS[f]}</div><div class="detail-item-value deduct">-¥${formatNum(parseFloat(r[f]) || 0)}</div></div>`).join('')}
+        ${(r.customFields && r.customFields.deduction ? Object.entries(r.customFields.deduction) : []).map(([k, v]) => `<div><div class="detail-item-label">${escapeHtml(k)}</div><div class="detail-item-value deduct">-¥${formatNum(parseFloat(v) || 0)}</div></div>`).join('')}
+        <div style="grid-column:1/-1"><div class="detail-item-label">收入类型</div><div class="detail-item-value" style="font-size:13px;font-weight:500;">${INCOME_TYPE_LABELS[r.incomeType || 'salary'] || '工资薪金'}</div></div>
+        ${r.note ? `<div style="grid-column:1/-1"><div class="detail-item-label">备注</div><div class="detail-item-value" style="font-size:13px;font-weight:400;">${escapeHtml(r.note)}</div></div>` : ''}
+        </div></div></td></tr>`;
+                }).join('');
+            }
+
+            function toggleDetail(id) {
+                const row = document.getElementById('detail-' + id);
+                if (row) row.classList.toggle('show');
+            }
+
+            function openRecordModal(editId) {
+                const modal = document.getElementById('recordModal'),
+                    title = document.getElementById('modalTitle');
+                document.getElementById('editId').value = editId || '';
+                if (editId) {
+                    const r = records.find(x => x.id === editId);
+                    if (!r) return;
+                    title.textContent = '编辑工资记录';
+                    document.getElementById('f_date').value = r.date || '';
+                    document.getElementById('f_incomeType').value = r.incomeType || 'salary';
+                    document.getElementById('f_autoCalc').checked = false;
+                    [...INCOME_FIELDS, ...DEDUCT_FIELDS].forEach(f => {
+                        document.getElementById('f_' + f).value = r[f] || '';
+                    });
+                    document.getElementById('f_note').value = r.note || '';
+                    renderCustomFieldsInForm(r);
+                    document.getElementById('calcHint').style.display = 'none';
+                } else {
+                    title.textContent = '新增工资记录';
+                    document.getElementById('recordForm').reset();
+                    const now = new Date();
+                    document.getElementById('f_date').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+                    document.getElementById('f_incomeType').value = 'salary';
+                    document.getElementById('f_autoCalc').checked = true;
+                    renderCustomFieldsInForm(null);
+                    document.getElementById('calcHint').style.display = 'flex';
+                }
+                updatePreview();
+                modal.classList.add('show');
+            }
+
+            function closeRecordModal() {
+                document.getElementById('recordModal').classList.remove('show');
+            }
+            async function saveRecord() {
+                const date = document.getElementById('f_date').value;
+                if (!date) {
+                    showToast('请选择日期', 'error');
+                    return;
+                }
+                const baseSalary = document.getElementById('f_baseSalary').value;
+                if (!baseSalary) {
+                    showToast('请填写基本工资', 'error');
+                    return;
+                }
+                const editId = document.getElementById('editId').value;
+                const record = {
+                    id: editId || genId(),
+                    date,
+                    incomeType: document.getElementById('f_incomeType').value
+                };
+                [...INCOME_FIELDS, ...DEDUCT_FIELDS].forEach(f => {
+                    record[f] = document.getElementById('f_' + f).value || '0';
+                });
+                record.note = document.getElementById('f_note').value || '';
+                record.customFields = collectCustomFieldsFromForm();
+                const now = new Date().toISOString();
+                if (editId) {
+                    const idx = records.findIndex(r => r.id === editId);
+                    if (idx > -1) {
+                        record.createdAt = records[idx].createdAt;
+                        record.updatedAt = now;
+                        records[idx] = record;
+                    }
+                    showToast('记录已更新', 'success');
+                } else {
+                    record.createdAt = now;
+                    record.updatedAt = now;
+                    records.push(record);
+                    showToast('记录已保存', 'success');
+                }
+                await saveData();
+                closeRecordModal();
+                refreshAll();
+            }
+
+            function editRecord(id) {
+                openRecordModal(id);
+            }
+            async function deleteRecord(id) {
+                if (!confirm('确定要删除这条工资记录吗？此操作不可恢复。')) return;
+                records = records.filter(r => r.id !== id);
+                await saveData();
+                showToast('记录已删除', 'success');
+                refreshAll();
+            }
+
+            function initStatDefaults() {
+                const s = document.getElementById('statStart'),
+                    e = document.getElementById('statEnd');
+                if (!s.value && !e.value) setStatThisYear();
+            }
+
+            function setStatThisYear() {
+                const y = new Date().getFullYear();
+                document.getElementById('statStart').value = `${y}-01-01`;
+                document.getElementById('statEnd').value = `${y}-12-31`;
+                runStats();
+            }
+
+            function setStatAll() {
+                if (records.length === 0) return;
+                const dates = records.map(r => r.date).filter(Boolean).sort();
+                document.getElementById('statStart').value = dates[0];
+                document.getElementById('statEnd').value = dates[dates.length - 1];
+                runStats();
+            }
+
+            function runStats() {
+                const start = document.getElementById('statStart').value,
+                    end = document.getElementById('statEnd').value;
+                const item = document.getElementById('statItem').value;
+                const itemLabel = document.getElementById('statItem').options[document.getElementById('statItem').selectedIndex].text;
+                if (!start || !end) {
+                    showToast('请选择起止日期', 'error');
+                    return;
+                }
+                const filtered = records.filter(r => r.date && r.date >= start && r.date <= end).sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+                let total = 0;
+                filtered.forEach(r => {
+                    if (item === 'totalIncome' || item === 'netSalary' || item === 'totalDeduction') total += calcRecord(r)[item];
+                    else total += parseFloat(r[item]) || 0;
+                });
+                const card = document.getElementById('statResultCard');
+                card.style.display = 'flex';
+                document.getElementById('statResultLabel').textContent = `${itemLabel} · 合计`;
+                document.getElementById('statResultValue').textContent = `¥${formatNum(total)}`;
+                document.getElementById('statResultRange').textContent = `时间范围：${start} 至 ${end}`;
+                document.getElementById('statResultCount').textContent = `记录数：${filtered.length} 条`;
+                document.getElementById('statResultAvg').textContent = `条均：¥${formatNum(filtered.length ? total / filtered.length : 0)}`;
+                renderStatsChart(filtered, item);
+                renderBreakdown(filtered);
+            }
+
+            function renderStatsChart(filtered, item) {
+                const canvas = document.getElementById('statsChart');
+                if (!canvas) return;
+                if (!filtered) {
+                    const start = document.getElementById('statStart').value,
+                        end = document.getElementById('statEnd').value;
+                    filtered = (start && end) ? records.filter(r => r.date && r.date >= start && r.date <= end) : [...records];
+                }
+                const monthly = aggregateRecordsByMonth(filtered);
+                drawBarChart(canvas, monthly, item || 'totalIncome');
+            }
+
+            function renderBreakdown(filtered) {
+                const list = document.getElementById('breakdownList');
+                if (!filtered || filtered.length === 0) {
+                    list.innerHTML = '<div class="empty-state" style="padding:20px 0;"><div class="empty-state-text" style="font-size:13px;">暂无数据</div></div>';
+                    return;
+                }
+                const incomeItems = {};
+                INCOME_FIELDS.forEach(f => {
+                    incomeItems[f] = filtered.reduce((s, r) => s + (parseFloat(r[f]) || 0), 0);
+                });
+                filtered.forEach(r => {
+                    if (r.customFields && r.customFields.income) Object.entries(r.customFields.income).forEach(([k, v]) => {
+                        incomeItems[k] = (incomeItems[k] || 0) + (parseFloat(v) || 0);
+                    });
+                });
+                const totalIncome = Object.values(incomeItems).reduce((a, b) => a + b, 0);
+                const deductItems = {};
+                DEDUCT_FIELDS.forEach(f => {
+                    deductItems[f] = filtered.reduce((s, r) => s + (parseFloat(r[f]) || 0), 0);
+                });
+                filtered.forEach(r => {
+                    if (r.customFields && r.customFields.deduction) Object.entries(r.customFields.deduction).forEach(([k, v]) => {
+                        deductItems[k] = (deductItems[k] || 0) + (parseFloat(v) || 0);
+                    });
+                });
+                const totalDeduct = Object.values(deductItems).reduce((a, b) => a + b, 0);
+                let html = '<div class="breakdown-section-title">收入构成</div>';
+                Object.entries(incomeItems).forEach(([k, v]) => {
+                    const label = FIELD_LABELS[k] || k,
+                        pct = totalIncome ? (v / totalIncome * 100) : 0;
+                    html += `<div class="breakdown-item"><div class="breakdown-name">${escapeHtml(label)}</div><div class="breakdown-bar-wrap"><div class="breakdown-bar" style="width:${pct}%;background:var(--success)"></div></div><div class="breakdown-value">¥${formatNum(v)}</div></div>`;
+                });
+                html += '<div class="breakdown-section-title">扣除构成</div>';
+                Object.entries(deductItems).forEach(([k, v]) => {
+                    const label = FIELD_LABELS[k] || k,
+                        pct = totalDeduct ? (v / totalDeduct * 100) : 0;
+                    html += `<div class="breakdown-item"><div class="breakdown-name">${escapeHtml(label)}</div><div class="breakdown-bar-wrap"><div class="breakdown-bar" style="width:${pct}%;background:var(--danger)"></div></div><div class="breakdown-value">¥${formatNum(v)}</div></div>`;
+                });
+                list.innerHTML = html;
+            }
+
+            function aggregateRecordsByMonth(records) {
+                const monthMap = {};
+                records.forEach(r => {
+                    if (!r.date) return;
+                    const month = r.date.substring(0, 7);
+                    if (!monthMap[month]) {
+                        monthMap[month] = {
+                            date: month + '-01',
+                            baseSalary: 0,
+                            performanceBonus: 0,
+                            yearEndBonus: 0,
+                            otherAllowance: 0,
+                            pension: 0,
+                            medical: 0,
+                            unemployment: 0,
+                            housingFund: 0,
+                            incomeTax: 0,
+                            otherDeduction: 0,
+                            customFields: {
+                                income: {},
+                                deduction: {}
+                            }
+                        };
+                    }
+                    const m = monthMap[month];
+                    [...INCOME_FIELDS, ...DEDUCT_FIELDS].forEach(f => {
+                        m[f] += parseFloat(r[f]) || 0;
+                    });
+                    if (r.customFields) {
+                        if (r.customFields.income) Object.entries(r.customFields.income).forEach(([k, v]) => {
+                            m.customFields.income[k] = (m.customFields.income[k] || 0) + (parseFloat(v) || 0);
+                        });
+                        if (r.customFields.deduction) Object.entries(r.customFields.deduction).forEach(([k, v]) => {
+                            m.customFields.deduction[k] = (m.customFields.deduction[k] || 0) + (parseFloat(v) || 0);
+                        });
+                    }
+                });
+                return Object.values(monthMap).sort((a, b) => a.date.localeCompare(b.date));
+            }
+
+            function setupCanvas(canvas) {
+                const dpr = window.devicePixelRatio || 1;
+                const w = canvas.clientWidth || canvas.parentElement.clientWidth || 300;
+                const h = canvas.clientHeight || canvas.parentElement.clientHeight || 200;
+                canvas.width = w * dpr;
+                canvas.height = h * dpr;
+                const ctx = canvas.getContext('2d');
+                ctx.scale(dpr, dpr);
+                return {
+                    ctx,
+                    w,
+                    h
+                };
+            }
+
+            function drawLineChart(canvas, data, fields, colors) {
+                const {
+                    ctx,
+                    w,
+                    h
+                } = setupCanvas(canvas);
+                ctx.clearRect(0, 0, w, h);
+                if (!data || data.length === 0) {
+                    ctx.fillStyle = '#94A3B8';
+                    ctx.font = '13px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('暂无数据', w / 2, h / 2);
+                    return;
+                }
+                const padL = 50,
+                    padR = 16,
+                    padT = 36,
+                    padB = 36,
+                    chartW = w - padL - padR,
+                    chartH = h - padT - padB;
+                let maxVal = 0;
+                data.forEach(r => fields.forEach(f => {
+                    const v = f === 'totalIncome' || f === 'netSalary' ? calcRecord(r)[f] : (parseFloat(r[f]) || 0);
+                    maxVal = Math.max(maxVal, v);
+                }));
+                maxVal = maxVal * 1.15 || 100;
+                ctx.strokeStyle = '#F1F5F9';
+                ctx.lineWidth = 1;
+                ctx.fillStyle = '#94A3B8';
+                ctx.font = '11px sans-serif';
+                ctx.textAlign = 'right';
+                for (let i = 0; i <= 4; i++) {
+                    const y = padT + chartH * (1 - i / 4);
+                    ctx.beginPath();
+                    ctx.moveTo(padL, y);
+                    ctx.lineTo(w - padR, y);
+                    ctx.stroke();
+                    const val = maxVal * i / 4;
+                    ctx.fillText(val >= 10000 ? (val / 10000).toFixed(1) + 'w' : Math.round(val), padL - 8, y + 4);
+                }
+                ctx.textAlign = 'center';
+                data.forEach((r, i) => {
+                    const x = padL + (data.length === 1 ? chartW / 2 : chartW * i / (data.length - 1));
+                    ctx.fillStyle = '#94A3B8';
+                    const lbl = r.date ? (r.date.endsWith('-01') ? r.date.substring(5, 7) : r.date.substring(5)) : '';
+                    ctx.fillText(lbl, x, h - padB + 20);
+                });
+                ctx.textAlign = 'left';
+                ctx.font = '11px sans-serif';
+                fields.forEach((f, i) => {
+                    const x = padL + i * 100;
+                    ctx.fillStyle = colors[i];
+                    ctx.fillRect(x, 10, 14, 3);
+                    ctx.fillStyle = '#64748B';
+                    ctx.fillText(FIELD_LABELS[f] || f, x + 20, 15);
+                });
+                fields.forEach((field, fi) => {
+                    ctx.strokeStyle = colors[fi];
+                    ctx.lineWidth = 2.5;
+                    ctx.lineJoin = 'round';
+                    ctx.beginPath();
+                    data.forEach((r, i) => {
+                        const v = field === 'totalIncome' || field === 'netSalary' ? calcRecord(r)[field] : (parseFloat(r[field]) || 0);
+                        const x = padL + (data.length === 1 ? chartW / 2 : chartW * i / (data.length - 1));
+                        const y = padT + chartH * (1 - v / maxVal);
+                        if (i === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    });
+                    ctx.stroke();
+                    data.forEach((r, i) => {
+                        const v = field === 'totalIncome' || field === 'netSalary' ? calcRecord(r)[field] : (parseFloat(r[field]) || 0);
+                        const x = padL + (data.length === 1 ? chartW / 2 : chartW * i / (data.length - 1));
+                        const y = padT + chartH * (1 - v / maxVal);
+                        ctx.fillStyle = '#fff';
+                        ctx.beginPath();
+                        ctx.arc(x, y, 4, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.strokeStyle = colors[fi];
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                    });
+                });
+            }
+
+            function drawBarChart(canvas, data, field) {
+                const {
+                    ctx,
+                    w,
+                    h
+                } = setupCanvas(canvas);
+                ctx.clearRect(0, 0, w, h);
+                if (!data || data.length === 0) {
+                    ctx.fillStyle = '#94A3B8';
+                    ctx.font = '13px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('暂无数据', w / 2, h / 2);
+                    return;
+                }
+                const padL = 50,
+                    padR = 16,
+                    padT = 24,
+                    padB = 36,
+                    chartW = w - padL - padR,
+                    chartH = h - padT - padB;
+                let maxVal = 0;
+                data.forEach(r => {
+                    const v = (field === 'totalIncome' || field === 'netSalary' || field === 'totalDeduction') ? calcRecord(r)[field] : (parseFloat(r[field]) || 0);
+                    maxVal = Math.max(maxVal, v);
+                });
+                maxVal = maxVal * 1.15 || 100;
+                ctx.strokeStyle = '#F1F5F9';
+                ctx.lineWidth = 1;
+                ctx.fillStyle = '#94A3B8';
+                ctx.font = '11px sans-serif';
+                ctx.textAlign = 'right';
+                for (let i = 0; i <= 4; i++) {
+                    const y = padT + chartH * (1 - i / 4);
+                    ctx.beginPath();
+                    ctx.moveTo(padL, y);
+                    ctx.lineTo(w - padR, y);
+                    ctx.stroke();
+                    const val = maxVal * i / 4;
+                    ctx.fillText(val >= 10000 ? (val / 10000).toFixed(1) + 'w' : Math.round(val), padL - 8, y + 4);
+                }
+                const barGap = 12,
+                    barW = Math.min(40, (chartW - barGap * (data.length + 1)) / data.length);
+                const totalBarW = data.length * barW + (data.length - 1) * barGap;
+                const startX = padL + (chartW - totalBarW) / 2;
+                const isDeduct = DEDUCT_FIELDS.includes(field) || field === 'totalDeduction';
+                const barColor = isDeduct ? '#EF4444' : '#4F46E5',
+                    barColorLight = isDeduct ? '#FCA5A5' : '#A5B4FC';
+                data.forEach((r, i) => {
+                    const v = (field === 'totalIncome' || field === 'netSalary' || field === 'totalDeduction') ? calcRecord(r)[field] : (parseFloat(r[field]) || 0);
+                    const x = startX + i * (barW + barGap),
+                        barH = chartH * (v / maxVal),
+                        y = padT + chartH - barH;
+                    const grad = ctx.createLinearGradient(x, y, x, padT + chartH);
+                    grad.addColorStop(0, barColor);
+                    grad.addColorStop(1, barColorLight);
+                    ctx.fillStyle = grad;
+                    if (ctx.roundRect) {
+                        ctx.beginPath();
+                        ctx.roundRect(x, y, barW, barH, [4, 4, 0, 0]);
+                        ctx.fill();
+                    } else {
+                        ctx.fillRect(x, y, barW, barH);
+                    }
+                    if (barH > 20) {
+                        ctx.fillStyle = '#fff';
+                        ctx.font = '10px sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(v >= 10000 ? (v / 10000).toFixed(1) + 'w' : Math.round(v), x + barW / 2, y + 14);
+                    }
+                    ctx.fillStyle = '#94A3B8';
+                    ctx.font = '11px sans-serif';
+                    ctx.textAlign = 'center';
+                    const lbl = r.date ? (r.date.endsWith('-01') ? r.date.substring(5, 7) : r.date.substring(5)) : '';
+                    ctx.fillText(lbl, x + barW / 2, h - padB + 20);
+                });
+            }
+
+            function renderSettings() {
+                loadRateSettingsToForm();
+                renderCustomFieldLists();
+                document.getElementById('overviewCount').textContent = `${records.length} 条`;
+                if (records.length > 0) {
+                    const dates = records.map(r => r.date).filter(Boolean).sort();
+                    document.getElementById('overviewRange').textContent = `${dates[0]} 至 ${dates[dates.length - 1]}`;
+                    document.getElementById('overviewTotal').textContent = `¥${formatNum(records.reduce((s, r) => s + calcRecord(r).netSalary, 0))}`;
+                } else {
+                    document.getElementById('overviewRange').textContent = '-';
+                    document.getElementById('overviewTotal').textContent = '¥0.00';
+                }
+            }
+
+            function exportData() {
+                const data = {
+                    version: APP_VERSION,
+                    exportedAt: new Date().toISOString(),
+                    records,
+                    settings
+                };
+                const blob = new Blob([JSON.stringify(data, null, 2)], {
+                    type: 'application/json'
+                });
+                const url = URL.createObjectURL(blob),
+                    a = document.createElement('a');
+                a.href = url;
+                a.download = `salary-backup-${new Date().toISOString().substring(0, 10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('数据已导出', 'success');
+            }
+
+            function importData(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result),
+                            imported = data.records || [];
+                        if (!Array.isArray(imported) || imported.length === 0) {
+                            showToast('文件中没有有效记录', 'error');
+                            return;
+                        }
+                        imported.forEach(r => {
+                            if (!r.id) r.id = genId();
+                        });
+                        const existingIds = new Set(records.map(r => r.id));
+                        let added = 0;
+                        imported.forEach(r => {
+                            if (!existingIds.has(r.id)) {
+                                records.push(r);
+                                added++;
+                            }
+                        });
+                        saveData().then(() => {
+                            showToast(`成功导入 ${added} 条记录`, 'success');
+                            refreshAll();
+                        });
+                    } catch (err) {
+                        showToast('文件解析失败，请确认是有效的 JSON 文件', 'error');
+                    }
+                };
+                reader.readAsText(file);
+                event.target.value = '';
+            }
+            async function clearAllData() {
+                if (!confirm('⚠️ 确定要清空所有工资记录吗？\n\n此操作不可恢复，建议先导出备份。')) return;
+                if (!confirm('再次确认：真的要删除全部数据吗？')) return;
+                records = [];
+                await saveData();
+                showToast('所有数据已清空', 'success');
+                refreshAll();
+            }
+
+            function formatNum(n) {
+                return Number(n || 0).toLocaleString('zh-CN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+
+            function escapeHtml(str) {
+                const d = document.createElement('div');
+                d.textContent = str;
+                return d.innerHTML;
+            }
+
+            function showToast(message, type = 'info') {
+                const container = document.getElementById('toastContainer'),
+                    toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                const icons = {
+                    success: '✅',
+                    error: '❌',
+                    warning: '⚠️',
+                    info: 'ℹ️'
+                };
+                toast.innerHTML = `<span class="toast-icon">${icons[type] || icons.info}</span><span>${escapeHtml(message)}</span>`;
+                container.appendChild(toast);
+                setTimeout(() => {
+                    toast.classList.add('out');
+                    setTimeout(() => toast.remove(), 300);
+                }, 2800);
+            }
+
+            function refreshAll() {
+                if (currentPage === 'dashboard') renderDashboard();
+                if (currentPage === 'records') renderRecords();
+                if (currentPage === 'stats') runStats();
+                if (currentPage === 'settings') renderSettings();
+            }
+
+            function loadDemoData() {
+                const demo = [{
+                        date: '2026-01-15',
+                        incomeType: 'salary',
+                        baseSalary: 15000,
+                        performanceBonus: 2000,
+                        yearEndBonus: 0,
+                        otherAllowance: 500,
+                        pension: 1200,
+                        medical: 300,
+                        unemployment: 75,
+                        housingFund: 1800,
+                        incomeTax: 680,
+                        otherDeduction: 0,
+                        note: '1月工资'
+                    },
+                    {
+                        date: '2026-02-15',
+                        incomeType: 'salary',
+                        baseSalary: 15000,
+                        performanceBonus: 2500,
+                        yearEndBonus: 0,
+                        otherAllowance: 500,
+                        pension: 1200,
+                        medical: 300,
+                        unemployment: 75,
+                        housingFund: 1800,
+                        incomeTax: 720,
+                        otherDeduction: 0,
+                        note: '2月工资'
+                    },
+                    {
+                        date: '2026-03-15',
+                        incomeType: 'salary',
+                        baseSalary: 15000,
+                        performanceBonus: 3000,
+                        yearEndBonus: 0,
+                        otherAllowance: 500,
+                        pension: 1200,
+                        medical: 300,
+                        unemployment: 75,
+                        housingFund: 1800,
+                        incomeTax: 850,
+                        otherDeduction: 0,
+                        note: '3月工资'
+                    },
+                    {
+                        date: '2026-04-15',
+                        incomeType: 'salary',
+                        baseSalary: 16000,
+                        performanceBonus: 3500,
+                        yearEndBonus: 0,
+                        otherAllowance: 600,
+                        pension: 1280,
+                        medical: 320,
+                        unemployment: 80,
+                        housingFund: 1920,
+                        incomeTax: 980,
+                        otherDeduction: 0,
+                        note: '调薪后首月'
+                    },
+                    {
+                        date: '2026-05-15',
+                        incomeType: 'salary',
+                        baseSalary: 16000,
+                        performanceBonus: 4000,
+                        yearEndBonus: 0,
+                        otherAllowance: 600,
+                        pension: 1280,
+                        medical: 320,
+                        unemployment: 80,
+                        housingFund: 1920,
+                        incomeTax: 1100,
+                        otherDeduction: 0,
+                        note: '5月工资'
+                    },
+                    {
+                        date: '2026-06-15',
+                        incomeType: 'salary',
+                        baseSalary: 16000,
+                        performanceBonus: 3000,
+                        yearEndBonus: 20000,
+                        otherAllowance: 600,
+                        pension: 1280,
+                        medical: 320,
+                        unemployment: 80,
+                        housingFund: 1920,
+                        incomeTax: 3500,
+                        otherDeduction: 0,
+                        note: '含半年年终奖'
+                    },
+                    {
+                        date: '2026-07-20',
+                        incomeType: 'labor',
+                        baseSalary: 8000,
+                        performanceBonus: 0,
+                        yearEndBonus: 0,
+                        otherAllowance: 0,
+                        pension: 0,
+                        medical: 0,
+                        unemployment: 0,
+                        housingFund: 0,
+                        incomeTax: 1280,
+                        otherDeduction: 0,
+                        note: '外部咨询劳务报酬'
+                    }
+                ];
+                const now = new Date().toISOString();
+                demo.forEach(r => {
+                    r.id = genId();
+                    r.createdAt = now;
+                    r.updatedAt = now;
+                    r.customFields = {
+                        income: {},
+                        deduction: {}
+                    };
+                });
+                records = demo;
+                saveData();
+            }
+
+            function init() {
+                loadSettings();
+                loadData();
+                updateStatusUI();
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('demo') === '1' && records.length === 0) loadDemoData();
+                renderDashboard();
+                document.getElementById('recordModal').addEventListener('click', function(e) {
+                    if (e.target === this) closeRecordModal();
+                });
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') closeRecordModal();
+                });
+                let resizeTimer;
+                window.addEventListener('resize', function() {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(() => {
+                        if (currentPage === 'dashboard') renderTrendChart();
+                        if (currentPage === 'stats') renderStatsChart();
+                    }, 200);
+                });
+                splashTimer = setTimeout(enterApp, 2200);
+            }
+            init();
+        </script>
+    </body>
+
+</html>
